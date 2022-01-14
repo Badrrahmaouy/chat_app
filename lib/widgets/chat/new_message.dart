@@ -14,10 +14,12 @@ class _NewMessageState extends State<NewMessage> {
   void _sendMessage() async {
     FocusScope.of(context).unfocus();
     final user = await FirebaseAuth.instance.currentUser();
+		final userData = await Firestore.instance.collection('users').document(user.uid).get();
     Firestore.instance.collection('chat').add({
       'text': _enteredMessage,
       'createdAt': Timestamp.now(),
       'userId': user.uid,
+			'username': userData['username']
     });
     _controller.clear();
   }
@@ -33,7 +35,7 @@ class _NewMessageState extends State<NewMessage> {
         bottom: 30,
       ),
       decoration: BoxDecoration(
-        color: Colors.grey[350],
+        color: Colors.grey[300],
       ),
       child: Row(
         children: [
