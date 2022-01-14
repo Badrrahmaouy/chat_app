@@ -25,8 +25,16 @@ class _NewMessageState extends State<NewMessage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.only(top: 4),
+      padding: EdgeInsets.only(
+        left: 30,
+        right: 30,
+        top: 10,
+        bottom: 30,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.grey[350],
+      ),
       child: Row(
         children: [
           Expanded(
