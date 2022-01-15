@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,7 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
     bool isLogin,
     BuildContext ctx,
   ) async {
-    AuthResult authResult;
+    UserCredential authResult;
 
     try {
       setState(() {
@@ -43,26 +43,26 @@ class _AuthScreenState extends State<AuthScreen> {
         );
 
         // save user image in firebase storage
-        final ref = FirebaseStorage.instance
+        final ref = firebase_storage.FirebaseStorage.instance
             .ref()
             .child('user_image')
             .child(authResult.user.uid + '.jpg');
 
-        await ref.putFile(image).onComplete;
+        await ref.putFile(image);
 
         final url = await ref.getDownloadURL();
 
         //save user data in firestore database
-        await Firestore.instance
+        await FirebaseFirestore.instance
             .collection('users')
-            .document(authResult.user.uid)
-            .setData({
+            .doc(authResult.user.uid)
+            .set({
           'username': username,
           'email': email,
           'image_url': url,
         });
       }
-      print('User added succesfully');
+      print('User added succesfully!');
     } on PlatformException catch (e) {
       var message = 'An error occured, please check your credentials!';
 
