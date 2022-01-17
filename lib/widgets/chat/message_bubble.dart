@@ -8,7 +8,7 @@ class MessageBubble extends StatelessWidget {
   final bool isMe;
 
   MessageBubble(this.message, this.username, this.userImage, this.isMe,
-      {this.key});
+      {required this.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class MessageBubble extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: isMe
                           ? Colors.black
-                          : Theme.of(context).accentTextTheme.headline1.color,
+                          : Theme.of(context).accentTextTheme.headline1?.color,
                     ),
                   ),
                   Text(

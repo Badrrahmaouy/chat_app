@@ -46,7 +46,7 @@ class _AuthScreenState extends State<AuthScreen> {
         final ref = firebase_storage.FirebaseStorage.instance
             .ref()
             .child('user_image')
-            .child(authResult.user.uid + '.jpg');
+            .child(authResult.user!.uid + '.jpg');
 
         await ref.putFile(image);
 
@@ -55,7 +55,7 @@ class _AuthScreenState extends State<AuthScreen> {
         //save user data in firestore database
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(authResult.user.uid)
+            .doc(authResult.user?.uid)
             .set({
           'username': username,
           'email': email,
@@ -67,10 +67,10 @@ class _AuthScreenState extends State<AuthScreen> {
       var message = 'An error occured, please check your credentials!';
 
       if (e.message != null) {
-        message = e.message;
+        message = e.message!;
       }
 
-      Scaffold.of(ctx).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
           backgroundColor: Theme.of(ctx).errorColor,
@@ -80,7 +80,7 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
-      print('err' + err);
+      print('err' + err.toString());
       setState(() {
         _isLoading = false;
       });

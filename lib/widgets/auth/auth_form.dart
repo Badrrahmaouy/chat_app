@@ -1,15 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
-import '../pickers/user_image_picker.dart';
+import 'package:flutter_complete_guide/widgets/pickers/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(
     String email,
     String password,
     String username,
-		File image,
+    File image,
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
@@ -30,35 +29,25 @@ class _AuthFormState extends State<AuthForm> {
   var _userEmail = '';
   var _username = '';
   var _userPassword = '';
-  File _userImageFile;
+  late File _userImageFile;
 
   void _pickedImage(File image) {
     _userImageFile = image;
   }
 
   void _trySubmit() {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState?.validate();
     FocusScope.of(context).unfocus(); //closes the keyboard when executed
 
-    if (_userImageFile == null && !_isLogin) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please pick an image'),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-      return;
-    }
-
-    if (isValid) {
+    if (isValid != null) {
       _formKey.currentState
-          .save(); //when executed, it fires onSaved method on TextFormFields
+          ?.save(); //when executed, it fires onSaved method on TextFormFields
       //Use those values to send our auth request...
       widget.submitFn(
         _userEmail.trim(),
         _userPassword.trim(),
         _username.trim(),
-				_userImageFile,
+        _userImageFile,
         _isLogin,
         context,
       );
@@ -81,11 +70,11 @@ class _AuthFormState extends State<AuthForm> {
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   TextFormField(
                     key: ValueKey('email'),
-										autocorrect: false,
-										textCapitalization: TextCapitalization.none,
-										enableSuggestions: false,
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
+                    enableSuggestions: false,
                     validator: (value) {
-                      if (value.isEmpty || !value.contains('@')) {
+                      if (value!.isEmpty || !value.contains('@')) {
                         return 'Please enter  a valid email address';
                       }
                       return null;
@@ -95,17 +84,17 @@ class _AuthFormState extends State<AuthForm> {
                       labelText: 'Email address',
                     ),
                     onSaved: (value) {
-                      _userEmail = value;
+                      _userEmail = value!;
                     },
                   ),
                   if (!_isLogin)
                     TextFormField(
                       key: ValueKey('username'),
-											autocorrect: true,
-										textCapitalization: TextCapitalization.words,
-										enableSuggestions: true,
+                      autocorrect: true,
+                      textCapitalization: TextCapitalization.words,
+                      enableSuggestions: true,
                       validator: (value) {
-                        if (value.isEmpty || value.length < 4) {
+                        if (value!.isEmpty || value.length < 4) {
                           return 'Please enter at least 4 characters';
                         }
                         return null;
@@ -114,13 +103,13 @@ class _AuthFormState extends State<AuthForm> {
                         labelText: 'Username',
                       ),
                       onSaved: (value) {
-                        _username = value;
+                        _username = value!;
                       },
                     ),
                   TextFormField(
                     key: ValueKey('password'),
                     validator: (value) {
-                      if (value.isEmpty || value.length < 7) {
+                      if (value!.isEmpty || value.length < 7) {
                         return 'Password must be at least 7 characters long';
                       }
                       return null;
@@ -128,7 +117,7 @@ class _AuthFormState extends State<AuthForm> {
                     decoration: InputDecoration(labelText: 'Password'),
                     obscureText: true,
                     onSaved: (value) {
-                      _userPassword = value;
+                      _userPassword = value!;
                     },
                   ),
                   SizedBox(height: 12),

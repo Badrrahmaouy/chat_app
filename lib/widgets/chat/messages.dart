@@ -13,21 +13,21 @@ class Messages extends StatelessWidget {
             .collection('chat')
             .orderBy('createdAt', descending: true)
             .snapshots(),
-        builder: (ctx, chatSnapshot) {
+        builder: (ctx, AsyncSnapshot<QuerySnapshot> chatSnapshot) {
           if (chatSnapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          final chatDocs = chatSnapshot.data.docs;
+          final chatDocs = chatSnapshot.data!.docs;
           return ListView.builder(
             reverse: true,
             itemCount: chatDocs.length,
             itemBuilder: (ctx, index) => MessageBubble(
-              chatDocs[index].data()['text'],
-              chatDocs[index].data()['username'],
-              chatDocs[index].data()['userImage'],
-              chatDocs[index].data()['userId'] == user.uid,
+              chatDocs[index]['text'],
+              chatDocs[index]['username'],
+              chatDocs[index]['userImage'],
+              chatDocs[index]['userId'] == user?.uid,
               key: ValueKey(
                 chatDocs[index].id,
               ),
