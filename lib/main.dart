@@ -5,8 +5,15 @@ import 'package:flutter/material.dart';
 import './screens/auth_screen.dart';
 import './screens/chat_screen.dart';
 import './screens/splash_screen.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

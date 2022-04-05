@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../widgets/auth/auth_form.dart';
 
@@ -63,8 +62,14 @@ class _AuthScreenState extends State<AuthScreen> {
         });
       }
       print('User added succesfully!');
-    } on PlatformException catch (e) {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
       var message = 'An error occured, please check your credentials!';
+      
 
       if (e.message != null) {
         message = e.message;
